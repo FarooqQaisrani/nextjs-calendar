@@ -4,7 +4,13 @@ module.exports = {
     './components/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        brand: { DEFAULT: '#75969f', dark: '#2b4650' },
+        textDark: '#000',
+        textLight: '#222',
+      },
+    },
   },
   plugins: [],
 }
