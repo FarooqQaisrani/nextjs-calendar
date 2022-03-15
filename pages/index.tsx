@@ -10,12 +10,12 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className="flex w-full flex-1 flex-col items-center justify-center px-20 text-center">
-        <h1 className="text-4xl font-bold">
-          Welcome to <span className="text-brand">Calendar app</span>
-        </h1>
+      <main className="flex w-full flex-1 flex-col items-center justify-center space-y-4 px-20 text-center">
+        <h1 className="text-4xl font-bold text-brand">Calendar app</h1>
 
-        <Calendar />
+        <div suppressHydrationWarning={true}>
+          {typeof window && <Calendar />}
+        </div>
       </main>
     </div>
   )
