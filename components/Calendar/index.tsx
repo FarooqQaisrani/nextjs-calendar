@@ -48,9 +48,9 @@ export default class Calendar extends React.PureComponent<MyProps, MyState> {
     //render weekdays
     let weekdays = this.weekdaysShort.map((day) => {
       return (
-        <button key={day} className="h-10 w-10 bg-slate-200">
+        <td key={day} className="h-10 w-10 bg-slate-200">
           {day}
-        </button>
+        </td>
       )
     })
 
@@ -58,7 +58,9 @@ export default class Calendar extends React.PureComponent<MyProps, MyState> {
     let daysFromPrevNextMonth = []
     for (let i = 0; i < +this.firstDayOfMonth(); i++) {
       daysFromPrevNextMonth.push(
-        <p key={i} className="h-10 w-10 bg-slate-200 text-gray-500"></p>
+        <td key={i} className="h-10 w-10 bg-slate-200 text-gray-500">
+          {''}
+        </td>
       )
     }
 
@@ -66,16 +68,16 @@ export default class Calendar extends React.PureComponent<MyProps, MyState> {
     let daysInThisMonth = []
     for (let d = 1; d <= this.daysInMonth(); d++) {
       daysInThisMonth.push(
-        <p
+        <td
           key={d}
           className={`h-10 w-10 ${
-            d === this.currentDay()
+            d === +this.currentDay()
               ? 'bg-blue-400 text-white'
               : 'bg-slate-200 text-gray-500'
           }`}
         >
-          {d}
-        </p>
+          <p>{d}</p>
+        </td>
       )
     }
 
@@ -83,10 +85,9 @@ export default class Calendar extends React.PureComponent<MyProps, MyState> {
     let totalDays = [...daysFromPrevNextMonth, ...daysInThisMonth]
     let rows: Array<any> = []
     let cells: Array<any> = []
-    console.log('totalDays', totalDays)
 
     totalDays.forEach((row, i) => {
-      if (i % 7 === 0) {
+      if (i % 7 !== 0) {
         cells.push(row)
       } else {
         let insertRow = cells.slice()
@@ -101,28 +102,27 @@ export default class Calendar extends React.PureComponent<MyProps, MyState> {
     })
 
     let daysElements = rows.map((d, i) => {
-      return (
-        <button key={i * 100} className="h-10 w-10 bg-slate-200 text-gray-500">
-          {d}
-        </button>
-      )
+      return <tr key={i * 100}>{d}</tr>
     })
 
     return (
       <div className="relative mx-auto w-96" data-testid="calendar">
-        {/* Header */}
-        <div className="flex flex-row justify-center">
-          <h3></h3>
-        </div>
-        {/*Week Days */}
-        <div className="flex flex-row justify-start bg-slate-100">
-          {weekdays}
-        </div>
+        <table data-testid="calendar">
+          {/* Header */}
+          <thead>
+            <tr>
+              <h3></h3>
+            </tr>
+          </thead>
 
-        {/* Dates */}
-        <div className="flex flex-row flex-wrap justify-start bg-slate-100">
-          {daysElements}
-        </div>
+          <tbody>
+            {/*Week Days */}
+            <tr className=" bg-slate-100">{weekdays}</tr>
+
+            {/* Dates */}
+            {daysElements}
+          </tbody>
+        </table>
       </div>
     )
   }
