@@ -10,10 +10,10 @@ describe('Given that I am any user', () => {
       cy.get('[data-testid="calendar"]').should('exist')
     })
     it('It should have Month', () => {
-      cy.get('[data-testid="month"]').should('have.text')
+      cy.get('[data-testid="month"]').should('not.be.empty')
     })
     it('It should have Dates', () => {
-      cy.get('[data-testid="date"]').should('have.text')
+      cy.get('[data-testid="date"]').should('not.be.empty')
     })
   })
 })

@@ -1,5 +1,6 @@
 import React from 'react'
 import moment from 'moment'
+import Date from 'components/shared/Date'
 
 type MyProps = {
   width?: string
@@ -44,6 +45,47 @@ export default class Calendar extends React.PureComponent<MyProps, MyState> {
     return firstDay
   }
 
+  onSelectChange = (e, data) => {}
+
+  SelectList = (props: any) => {
+    let popup = props.data.map((data: any) => {
+      return (
+        <div key={data}>
+          <button
+            onClick={(e) => {
+              this.onSelectChange(e, data)
+            }}
+          >
+            {data}
+          </button>
+        </div>
+      )
+    })
+
+    return <div className="">{popup}</div>
+  }
+
+  onChangeMonth = (e, month) => {
+    this.setState({
+      showMonthPopup: !this.state.showMonthPopup,
+    })
+  }
+
+  MonthNav = () => {
+    return (
+      <span className="cursor-pointer text-black">
+        <span
+          data-testid="month"
+          className="text-black"
+          onClick={(e) => this.onChangeMonth(e, this.month())}
+        >
+          {this.month()}
+        </span>
+        {this.state.showMonthPopup && <this.SelectList data={this.months} />}
+      </span>
+    )
+  }
+
   render() {
     //render weekdays
     let weekdays = this.weekdaysShort.map((day) => {
@@ -58,9 +100,11 @@ export default class Calendar extends React.PureComponent<MyProps, MyState> {
     let daysFromPrevNextMonth = []
     for (let i = 0; i < +this.firstDayOfMonth(); i++) {
       daysFromPrevNextMonth.push(
-        <td key={i} className="h-10 w-10 bg-slate-200 text-gray-500">
-          {''}
-        </td>
+        <Date
+          key={i}
+          className="h-10 w-10 bg-slate-200 text-gray-500"
+          date={''}
+        />
       )
     }
 
@@ -68,16 +112,15 @@ export default class Calendar extends React.PureComponent<MyProps, MyState> {
     let daysInThisMonth = []
     for (let d = 1; d <= this.daysInMonth(); d++) {
       daysInThisMonth.push(
-        <td
-          key={d}
+        <Date
+          key={d * 100}
           className={`h-10 w-10 ${
             d === +this.currentDay()
               ? 'bg-blue-400 text-white'
               : 'bg-slate-200 text-gray-500'
           }`}
-        >
-          <p>{d}</p>
-        </td>
+          date={d}
+        />
       )
     }
 
@@ -106,12 +149,19 @@ export default class Calendar extends React.PureComponent<MyProps, MyState> {
     })
 
     return (
-      <div className="relative mx-auto w-96" data-testid="calendar">
+      <div
+        className="relative mx-auto flex w-96 flex-row justify-center"
+        data-testid="calendar"
+      >
         <table data-testid="calendar">
           {/* Header */}
-          <thead>
+          <thead className="bg-gray-500">
             <tr>
-              <h3></h3>
+              <td colSpan={1}></td>
+              <td colSpan={5}>
+                <this.MonthNav />
+              </td>
+              <td colSpan={1}></td>
             </tr>
           </thead>
 
