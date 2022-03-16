@@ -7,8 +7,8 @@ describe('Given that I am any user', () => {
 
   context('When I access Date Range Selector', () => {
     it('I can select FROM date', () => {
-      cy.get('[data-testid="date-2022-03-16"]').click()
-      cy.get('[data-testid="date-2022-03-16"]').should('have.class', 'selected')
+      cy.get('[data-testid="date-2022-03-17"]').click()
+      cy.get('[data-testid="date-2022-03-17"]').should('have.class', 'selected')
     })
 
     it('I can select END date', () => {

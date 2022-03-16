@@ -46,10 +46,11 @@ describe('Given that I am any user', () => {
       cy.wait('@losAPI')
       cy.wait(2000)
 
-      cy.get('[data-testid="date-2022-03-16"]').click()
-      cy.get('[data-testid="los-tip-2022-03-16"]').should('be.visible')
+      cy.get('[data-testid="date-2022-03-24"]').click()
+      cy.wait(500)
+      cy.get('[data-testid="los-tip-2022-03-24"]').should('be.visible')
 
-      for (let i = 17; i < 23; i++) {
+      for (let i = 24; i < 31; i++) {
         cy.get(`[data-testid="date-2022-03-${i}"]`).should(
           'have.class',
           'preselected'
@@ -59,7 +60,7 @@ describe('Given that I am any user', () => {
   })
 
   context('When I select start date', () => {
-    it.only('It should disable disable all dates after first unavailable date', () => {
+    it('It should disable disable all dates after first unavailable date', () => {
       cy.contains('Suite Date Selector')
       cy.wait('@unavailableDatesApi')
       cy.wait('@losAPI')
@@ -67,9 +68,9 @@ describe('Given that I am any user', () => {
       cy.get('[data-testid="btn-next-month"]').click()
       cy.get('[data-testid="date-2022-04-01"]').click()
 
-      cy.get('[data-testid="los-tip-2022-04-16"]').should('be.visible')
+      cy.get('[data-testid="los-tip-2022-04-01"]').should('be.visible')
 
-      cy.get('[data-testid="los-tip-2022-04-20"]').should(
+      cy.get('[data-testid="date-2022-04-20"]').should(
         'have.class',
         'unavailable'
       )

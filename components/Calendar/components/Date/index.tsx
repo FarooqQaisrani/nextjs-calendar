@@ -1,6 +1,6 @@
 import moment from 'moment'
 import React, { MouseEventHandler } from 'react'
-import { LosDate, ProjectDate } from 'types'
+import { LosDate, ProjectDate, UnvailableDate } from 'types'
 
 interface Props {
   date: ProjectDate
@@ -11,6 +11,8 @@ interface Props {
   showCalendarWithoutChecks?: boolean
   isUnavailable?: boolean
   los?: LosDate | null
+  unavailableDates?: Array<UnvailableDate> | null
+  firstUnavilableDate?: UnvailableDate | null
 }
 
 const Date: React.FC<Props> = (props: Props) => {
@@ -18,6 +20,8 @@ const Date: React.FC<Props> = (props: Props) => {
   const internalClasses: Array<string> = []
   let showLosTooltip = false
   let isPartOfLos = false
+  let disableAfterFirstUnavailableDateWhenStartSelected = false
+  let checkoutOnly = false
 
   // Check if it is today to do basic highlight
   const isToday = moment(props.date.date).isSame(moment(), 'day')
@@ -26,15 +30,19 @@ const Date: React.FC<Props> = (props: Props) => {
   }
 
   let isBefore = moment(props.date.date).isBefore(moment(), 'day')
+
+  // Skip Calculations if set showCalendarWithoutChecks to false
   if (!props.showCalendarWithoutChecks) {
     // Disable any day previous days from Today
     if (isBefore || props.isUnavailable) {
       classess.push('cursor-not-allowed text-gray-300 unavailable line-through')
       internalClasses.push('border-0')
+    } else {
+      classess.push('cursor-pointer')
     }
 
-    // Highlight From date
     if (props.from) {
+      // Highlight From dates
       const isSameAsFrom = moment(props.from).isSame(
         moment(props.date.date),
         'day'
@@ -88,17 +96,42 @@ const Date: React.FC<Props> = (props: Props) => {
         internalClasses.push('border-0')
       }
     }
+
+    // Calcualte Checkout only state
+    let getCheckoutOnly = moment(props.date.date)
+    if (props.los && props.firstUnavilableDate && !props.from) {
+      getCheckoutOnly = getCheckoutOnly.add(props.los.los + 1, 'days')
+      if (getCheckoutOnly.isSameOrAfter(props.firstUnavilableDate.startDate)) {
+        checkoutOnly = true
+
+        internalClasses.push('border-0')
+      }
+    }
+
+    // Calcualte disableAfterFirstUnavailableDateWhenStartSelected
+    if (props.firstUnavilableDate && props.from) {
+      disableAfterFirstUnavailableDateWhenStartSelected = moment(
+        props.date.date
+      ).isSameOrAfter(props.firstUnavilableDate.startDate)
+
+      if (disableAfterFirstUnavailableDateWhenStartSelected) {
+        classess.push(
+          'cursor-not-allowed text-gray-300 unavailable line-through'
+        )
+        internalClasses.push('border-0')
+      }
+    }
   }
 
   return (
     <td
       className={[
-        `group z-0 h-10 w-10 cursor-pointer md:h-14 md:w-14 ${props.className}`,
+        `group z-0 h-10 w-10 md:h-14 md:w-14 ${props.className}`,
         ...classess,
       ].join(' ')}
       data-testid={`date-${props.date.date}`}
       onClick={(e) =>
-        !isBefore && !props.isUnavailable && !isPartOfLos
+        !isBefore && !props.isUnavailable && !isPartOfLos && !checkoutOnly
           ? props.onClick && props.onClick(e)
           : null
       }
@@ -109,13 +142,15 @@ const Date: React.FC<Props> = (props: Props) => {
           ...internalClasses,
         ].join(' ')}
       >
+        {/* Background highlight for preselect highlight */}
         {isPartOfLos && !props.end && (
           <div className="absolute top-0 left-0 right-0 bottom-0 z-0 bg-brand bg-opacity-10"></div>
         )}
 
+        {/* Minimum Length of stay highlight */}
         {showLosTooltip && (
           <p
-            className="absolute -top-9 left-0 right-0 z-10 inline-flex transform flex-row justify-center duration-200"
+            className="pointer-events-none absolute -top-9 left-0 right-0 z-10 inline-flex transform flex-row justify-center duration-200"
             data-testid={`los-tip-${props.date.date}`}
           >
             <span className="z-50 whitespace-nowrap rounded-md border border-gray-100 bg-white px-2 py-2 text-xs font-medium text-gray-500 shadow-lg">
@@ -124,6 +159,19 @@ const Date: React.FC<Props> = (props: Props) => {
           </p>
         )}
 
+        {/* Checkout only  */}
+        {checkoutOnly && (
+          <p
+            className="pointer-events-none absolute -top-9 left-0 right-0 z-10 hidden transform flex-row justify-center duration-200 group-hover:inline-flex"
+            data-testid={`los-tip-${props.date.date}`}
+          >
+            <span className="z-50 whitespace-nowrap rounded-md border border-gray-100 bg-white px-2 py-2 text-xs font-medium text-gray-500 shadow-lg">
+              Checkout only
+            </span>
+          </p>
+        )}
+
+        {/* Label */}
         <p className="z-50">{props.date.label}</p>
       </div>
     </td>

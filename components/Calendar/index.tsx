@@ -108,6 +108,13 @@ export default class Calendar extends React.PureComponent<MyProps, MyState> {
     }
   }
 
+  getFirstUnavailableDate = (date: string) => {
+    const dateMoment = moment(date)
+    return this.props.unavailableDates?.find((date: UnvailableDate) => {
+      return moment(date.startDate).isAfter(dateMoment)
+    })
+  }
+
   render() {
     //render weekdays
     let weekdays = this.weekdaysShort.map((day) => {
@@ -133,6 +140,14 @@ export default class Calendar extends React.PureComponent<MyProps, MyState> {
         d < 9 ? `0${d}` : d
       }`
 
+      // Let's find first unavailable date
+      let findFirstUnavailableDate = null
+      if (this.props.from) {
+        findFirstUnavailableDate = this.getFirstUnavailableDate(this.props.from)
+      } else {
+        findFirstUnavailableDate = this.getFirstUnavailableDate(makeDateString)
+      }
+
       daysInThisMonth.push(
         <Date
           key={makeDateString}
@@ -147,6 +162,8 @@ export default class Calendar extends React.PureComponent<MyProps, MyState> {
           }
           isUnavailable={this.checkIfDateIsUnavailable(makeDateString)}
           los={this.returnLosIfDateExistsInLosArray(makeDateString)}
+          unavailableDates={this.props.unavailableDates}
+          firstUnavilableDate={findFirstUnavailableDate}
         />
       )
     }

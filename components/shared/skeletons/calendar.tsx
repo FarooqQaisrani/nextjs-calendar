@@ -3,7 +3,9 @@ import React from 'react'
 const SharedUiSkeletonsCalendar: React.FC = ({ children }) => {
   const cells = []
   for (let i = 0; i < 31; i++) {
-    cells.push(<div className="col-span-1 h-12 rounded bg-slate-200"></div>)
+    cells.push(
+      <div key={i} className="col-span-1 h-12 rounded bg-slate-200"></div>
+    )
   }
   return (
     <div className="mx-auto w-full max-w-sm rounded-md border border-gray-200 p-4 shadow">

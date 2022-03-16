@@ -12,6 +12,10 @@ export default function handler(
 ) {
   res.status(200).json([
     {
+      startDate: '2022-03-27',
+      endDate: '2022-03-30',
+    },
+    {
       startDate: '2022-04-13',
       endDate: '2022-04-25',
     },
