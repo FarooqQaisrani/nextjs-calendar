@@ -1,4 +1,5 @@
 import Calendar from 'components/Calendar'
+import DatesSelected from 'components/shared/UI/DatesSelected'
 import moment from 'moment'
 import React, { useState } from 'react'
 import { LosDate, UnvailableDate } from 'types'
@@ -31,8 +32,12 @@ const DateRangeSelector: React.FC<Props> = (props: Props) => {
   }
 
   return (
-    <div className="flex  flex-col items-center justify-center border py-8 px-8">
-      <div suppressHydrationWarning={true}>
+    <div className="flex  flex-col items-center justify-center space-y-4">
+      <DatesSelected from={from} end={end} />
+      <div
+        suppressHydrationWarning={true}
+        className="rounded-2xl border py-8 px-8 shadow-sm"
+      >
         {typeof window && (
           <Calendar
             onDayClick={(e: any, date: string) => onDayClick(e, date)}

@@ -83,7 +83,7 @@ const Date: React.FC<Props> = (props: Props) => {
     // Highlight Los Days
     if (props.from && props.los) {
       const fromDateMoment = moment(props.from)
-      let losWithFromContext = moment(props.from).add(props.los.los, 'days')
+      let losWithFromContext = moment(props.from).add(props.los.los - 1, 'days')
 
       isPartOfLos = moment(props.date.date).isBetween(
         fromDateMoment,
@@ -103,7 +103,6 @@ const Date: React.FC<Props> = (props: Props) => {
       getCheckoutOnly = getCheckoutOnly.add(props.los.los, 'days')
       if (getCheckoutOnly.isSameOrAfter(props.firstUnavilableDate.startDate)) {
         checkoutOnly = true
-
         internalClasses.push('border-0')
       }
     }
