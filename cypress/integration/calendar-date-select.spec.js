@@ -15,8 +15,9 @@ describe('Given that I am any user', () => {
       cy.contains('24').click()
       cy.contains('30').click()
 
-      cy.contains('24').should('have.class', 'selected')
-      cy.contains('30').should('have.class', 'selected')
+      for (let i = 24; i < 31; i++) {
+        cy.contains(i).should('have.class', 'selected')
+      }
     })
   })
 })
