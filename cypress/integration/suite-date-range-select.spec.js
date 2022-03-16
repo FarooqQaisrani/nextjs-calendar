@@ -18,7 +18,7 @@ describe('Given that I am any user', () => {
       fixture: 'unavailable-dates.json',
     }).as('unavailableDatesApi')
 
-    cy.intercept('GET', Cypress.env('root_url') + 'api/los', {
+    cy.intercept('GET', Cypress.env('root_url') + 'api/los-dates', {
       fixture: 'los.json',
     }).as('losAPI')
 

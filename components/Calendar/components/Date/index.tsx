@@ -15,6 +15,7 @@ interface Props {
 
 const Date: React.FC<Props> = (props: Props) => {
   const classess = []
+  const internalClasses: Array<string> = []
   let showLosTooltip = false
   let isPartOfLos = false
 
@@ -29,6 +30,7 @@ const Date: React.FC<Props> = (props: Props) => {
     // Disable any day previous days from Today
     if (isBefore || props.isUnavailable) {
       classess.push('cursor-not-allowed text-gray-300 unavailable line-through')
+      internalClasses.push('border-0')
     }
 
     // Highlight From date
@@ -66,6 +68,7 @@ const Date: React.FC<Props> = (props: Props) => {
       )
       if (isBetween) {
         classess.push('bg-brand text-white selected')
+        internalClasses.push('border-brand')
       }
     }
 
@@ -81,7 +84,8 @@ const Date: React.FC<Props> = (props: Props) => {
         '[]'
       )
       if (isPartOfLos && !props.end) {
-        classess.push('text-gray-500')
+        classess.push('text-gray-500 preselected')
+        internalClasses.push('border-0')
       }
     }
   }
@@ -102,6 +106,7 @@ const Date: React.FC<Props> = (props: Props) => {
       <div
         className={[
           'relative z-0 flex h-14 w-14 flex-row items-center justify-center rounded-full border border-white hover:border-brand',
+          ...internalClasses,
         ].join(' ')}
       >
         {isPartOfLos && !props.end && (
@@ -109,7 +114,10 @@ const Date: React.FC<Props> = (props: Props) => {
         )}
 
         {showLosTooltip && (
-          <p className="absolute -top-9 left-0 right-0 z-10 inline-flex transform flex-row justify-center duration-200">
+          <p
+            className="absolute -top-9 left-0 right-0 z-10 inline-flex transform flex-row justify-center duration-200"
+            data-testid={`los-tip-${props.date.date}`}
+          >
             <span className="z-50 whitespace-nowrap rounded-md border border-gray-100 bg-white px-2 py-2 text-xs font-medium text-gray-500 shadow-lg">
               {props.los?.los}-nights minimum
             </span>
