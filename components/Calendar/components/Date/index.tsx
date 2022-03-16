@@ -37,8 +37,6 @@ const Date: React.FC<Props> = (props: Props) => {
     if (isBefore || props.isUnavailable) {
       classess.push('cursor-not-allowed text-gray-300 unavailable line-through')
       internalClasses.push('border-0')
-    } else {
-      classess.push('cursor-pointer')
     }
 
     if (props.from) {
@@ -120,6 +118,17 @@ const Date: React.FC<Props> = (props: Props) => {
         internalClasses.push('border-0')
       }
     }
+
+    // Push defualt pointer
+    if (
+      !(
+        isBefore ||
+        props.isUnavailable ||
+        disableAfterFirstUnavailableDateWhenStartSelected
+      )
+    ) {
+      classess.push('cursor-pointer')
+    }
   }
 
   return (
@@ -130,7 +139,11 @@ const Date: React.FC<Props> = (props: Props) => {
       ].join(' ')}
       data-testid={`date-${props.date.date}`}
       onClick={(e) =>
-        !isBefore && !props.isUnavailable && !isPartOfLos && !checkoutOnly
+        !isBefore &&
+        !props.isUnavailable &&
+        !isPartOfLos &&
+        !checkoutOnly &&
+        !disableAfterFirstUnavailableDateWhenStartSelected
           ? props.onClick && props.onClick(e)
           : null
       }
