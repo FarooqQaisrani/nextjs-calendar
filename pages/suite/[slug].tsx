@@ -37,7 +37,26 @@ const Home: NextPage = () => {
       </Head>
 
       <main className="flex w-full flex-1 flex-col items-center space-y-4 text-center">
-        <h1 className="text-4xl font-bold text-brand">Suite Date Selector</h1>
+        <div className="flex max-w-lg flex-col">
+          <h1 className="text-2xl font-bold text-brand">Suite Date Selector</h1>
+          <p className="text-md">
+            In this view there are two API calls to fetch
+            <span className="whitespace-nowrap text-sm font-bold">
+              {' '}
+              Unavailable Dates
+            </span>{' '}
+            and
+            <span className="whitespace-nowrap text-sm font-bold">
+              {' '}
+              Length of Stay{' '}
+            </span>
+            and utilizes those input to display
+            <span className="whitespace-nowrap text-sm font-bold">
+              {' '}
+              Minimum Stay, Checkout only, Disable future dates
+            </span>
+          </p>
+        </div>
 
         {isLoading ? (
           <SharedUiSkeletonsCalendar />

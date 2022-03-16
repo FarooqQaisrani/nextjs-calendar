@@ -11,7 +11,12 @@ const Home: NextPage = () => {
       </Head>
 
       <main className="flex w-full flex-1 flex-col items-center space-y-4  text-center">
-        <h1 className="text-4xl font-bold text-brand">Range Selector</h1>
+        <div className="flex flex-col max-w-lg">
+          <h1 className="text-2xl font-bold text-brand">Range Selector</h1>
+          <p className="text-">
+            In this view Calendar Compnent is disabling the dates before Today.
+          </p>
+        </div>
 
         <div suppressHydrationWarning={true}>
           {typeof window && <DateRangeSelector />}
