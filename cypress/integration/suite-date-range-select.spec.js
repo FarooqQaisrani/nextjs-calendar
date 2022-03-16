@@ -57,4 +57,22 @@ describe('Given that I am any user', () => {
       }
     })
   })
+
+  context('When I select start date', () => {
+    it.only('It should disable disable all dates after first unavailable date', () => {
+      cy.contains('Suite Date Selector')
+      cy.wait('@unavailableDatesApi')
+      cy.wait('@losAPI')
+      cy.wait(2000)
+      cy.get('[data-testid="btn-next-month"]').click()
+      cy.get('[data-testid="date-2022-04-01"]').click()
+
+      cy.get('[data-testid="los-tip-2022-04-16"]').should('be.visible')
+
+      cy.get('[data-testid="los-tip-2022-04-20"]').should(
+        'have.class',
+        'unavailable'
+      )
+    })
+  })
 })
