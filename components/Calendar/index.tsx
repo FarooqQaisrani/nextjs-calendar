@@ -9,7 +9,7 @@ type MyProps = {
   onNextMonth?: Function
   onPrevMonth?: Function
   onDayClick?: Function
-  from?: string
+  from?: string | null
 }
 type MyState = {
   dateContext: any
@@ -22,7 +22,6 @@ export default class Calendar extends React.PureComponent<MyProps, MyState> {
   constructor(props: MyProps) {
     super(props)
     this.width = props.width || '350px'
-    this.yearInput = React.createRef()
   }
 
   state: MyState = {
@@ -88,39 +87,6 @@ export default class Calendar extends React.PureComponent<MyProps, MyState> {
     })
   }
 
-  onYearChange = (e) => {
-    this.setYear(e.target.value)
-    this.props.onYearChange && this.props.onYearChange(e, e.target.value)
-  }
-  setYear = (year) => {
-    let dateContext = Object.assign({}, this.state.dateContext)
-    dateContext = moment(dateContext).set('year', year)
-    this.setState({
-      dateContext: dateContext,
-    })
-  }
-
-  onKeyUpYear = (e) => {
-    if (e.which === 13 || e.which === 27) {
-      this.setYear(e.target.value)
-      this.setState({
-        showYearNav: false,
-      })
-    }
-  }
-  YearNav = () => {
-    return (
-      <span
-        className="cursor-pointer"
-        onDoubleClick={(e) => {
-          this.showYearEditor(e)
-        }}
-      >
-        {this.year()}
-      </span>
-    )
-  }
-
   onDayClick = (e, date) => {
     this.props.onDayClick && this.props.onDayClick(e, date)
   }
@@ -157,6 +123,7 @@ export default class Calendar extends React.PureComponent<MyProps, MyState> {
           onClick={(e) => {
             this.onDayClick(e, makeDateString)
           }}
+          from={this.props.from}
         />
       )
     }
@@ -216,7 +183,7 @@ export default class Calendar extends React.PureComponent<MyProps, MyState> {
                 </svg>
               </td>
               <td colSpan={5}>
-                <this.MonthNav /> <this.YearNav />
+                <this.MonthNav /> {this.year()}
               </td>
               <td colSpan={1}>
                 <svg
