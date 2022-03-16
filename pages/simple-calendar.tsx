@@ -11,9 +11,12 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <div suppressHydrationWarning={true}>
-        {typeof window && <Calendar showCalendarWithoutChecks={true} />}
-      </div>
+      <main className="flex w-full flex-1 flex-col items-center justify-center space-y-4 px-20 text-center">
+        <h1 className="text-4xl font-bold text-brand">Simple Calendar </h1>
+        <div suppressHydrationWarning={true}>
+          {typeof window && <Calendar showCalendarWithoutChecks={true} />}
+        </div>
+      </main>
     </div>
   )
 }

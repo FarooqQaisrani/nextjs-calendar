@@ -1,7 +1,7 @@
 import React from 'react'
 
 const Footer: React.FC = ({ children }) => {
-  return <div className="flex flex-row">Footer</div>
+  return <footer className="flex flex-row"></footer>
 }
 
 export default Footer
