@@ -7,6 +7,9 @@ const Home: NextPage = () => {
   const [unavailableDates, setUnavailableDates] = useState(null)
   const [isLoading, setLoading] = useState(false)
 
+  /*----------------------------------------
+    Unavailable dates for This Suite
+  ----------------------------------------*/
   useEffect(() => {
     setLoading(true)
     fetch('/api/unavailable-dates')
@@ -30,7 +33,9 @@ const Home: NextPage = () => {
         <h1 className="text-4xl font-bold text-brand">Suite Date Selector</h1>
 
         <div suppressHydrationWarning={true}>
-          {typeof window && <DateRangeSelector />}
+          {typeof window && (
+            <DateRangeSelector unavailableDates={unavailableDates} />
+          )}
         </div>
       </main>
     </div>

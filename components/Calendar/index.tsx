@@ -1,5 +1,6 @@
-import React from 'react'
 import moment from 'moment'
+import React from 'react'
+import { UnvailableDate } from 'types'
 import Date from './components/Date'
 
 type MyProps = {
@@ -12,6 +13,7 @@ type MyProps = {
   from?: string | null
   end?: string | null
   showCalendarWithoutChecks?: boolean
+  unavailableDates?: Array<UnvailableDate> | null
 }
 type MyState = {
   dateContext: any
@@ -88,6 +90,24 @@ export default class Calendar extends React.PureComponent<MyProps, MyState> {
   onDayClick = (e: any, date: string) => {
     this.props.onDayClick && this.props.onDayClick(e, date)
   }
+
+  checkIfDateIsUnavailable = (date: string) => {
+    if (!this.props.unavailableDates) {
+      null
+    }
+
+    this.props.unavailableDates?.forEach((ud: UnvailableDate) => {})
+    return this.props.unavailableDates?.some((ud: UnvailableDate) => {
+      const isBetween = moment(date).isBetween(
+        ud.startDate,
+        ud.endDate,
+        undefined,
+        '[]'
+      )
+      return isBetween
+    })
+  }
+
   render() {
     //render weekdays
     let weekdays = this.weekdaysShort.map((day) => {
@@ -101,7 +121,9 @@ export default class Calendar extends React.PureComponent<MyProps, MyState> {
     //render days from previous and next months
     let daysFromPrevNextMonth = []
     for (let i = 0; i < +this.firstDayOfMonth(); i++) {
-      daysFromPrevNextMonth.push(<Date key={i} date={{ date: '' }} />)
+      daysFromPrevNextMonth.push(
+        <Date key={i} date={{ date: '' }} className="pointer-events-none" />
+      )
     }
 
     //render this month days
@@ -120,6 +142,7 @@ export default class Calendar extends React.PureComponent<MyProps, MyState> {
           showCalendarWithoutChecks={
             this.props.showCalendarWithoutChecks ?? false
           }
+          isUnavailable={this.checkIfDateIsUnavailable(makeDateString)}
         />
       )
     }

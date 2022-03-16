@@ -9,6 +9,7 @@ interface Props {
   from?: string | null
   end?: string | null
   showCalendarWithoutChecks?: boolean
+  isUnavailable?: boolean
 }
 
 const Date: React.FC<Props> = (props: Props) => {
@@ -23,9 +24,9 @@ const Date: React.FC<Props> = (props: Props) => {
   let isBefore = moment(props.date.date).isBefore(moment(), 'day')
   if (!props.showCalendarWithoutChecks) {
     // Disable any day previous days from Today
-    if (isBefore) {
+    if (isBefore || props.isUnavailable) {
       classess.push(
-        'cursor-not-allowed hover:bg-slate-200 text-gray-300 hover:text-gray-300'
+        'cursor-not-allowed hover:bg-slate-200 text-gray-300 hover:text-gray-300 unavailable'
       )
     }
 
@@ -45,7 +46,7 @@ const Date: React.FC<Props> = (props: Props) => {
       }
     }
 
-    // Highlight FDates between From and End
+    // Highlight Dates between From and End
     if (props.from && props.end) {
       const isBetween = moment(props.date.date).isBetween(props.from, props.end)
       if (isBetween) {
@@ -60,8 +61,12 @@ const Date: React.FC<Props> = (props: Props) => {
         `h-10 w-10 cursor-pointer bg-slate-200 text-gray-500 ${props.className} hover:bg-gray-700 hover:text-white`,
         ...classess,
       ].join(' ')}
-      data-testid="date"
-      onClick={(e) => (!isBefore ? props.onClick && props.onClick(e) : null)}
+      data-testid={`date-${props.date.date}`}
+      onClick={(e) =>
+        !isBefore && !props.isUnavailable
+          ? props.onClick && props.onClick(e)
+          : null
+      }
     >
       {props.date.label}
     </td>

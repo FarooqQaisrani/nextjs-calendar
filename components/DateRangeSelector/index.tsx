@@ -1,10 +1,13 @@
-import React, { useState } from 'react'
-import Head from 'next/head'
 import Calendar from 'components/Calendar'
-import { ProjectDate } from 'types'
 import moment from 'moment'
+import React, { useState } from 'react'
+import { UnvailableDate } from 'types'
 
-const DateRangeSelector: React.FC = () => {
+interface Props {
+  unavailableDates?: Array<UnvailableDate> | null | undefined
+}
+
+const DateRangeSelector: React.FC<Props> = (props: Props) => {
   const [from, setFrom] = useState<string | null>(null)
   const [end, setEnd] = useState<string | null>(null)
 
@@ -36,6 +39,7 @@ const DateRangeSelector: React.FC = () => {
             onDayClick={(e: any, date: string) => onDayClick(e, date)}
             from={from}
             end={end}
+            unavailableDates={props.unavailableDates}
           />
         )}
       </div>
