@@ -30,28 +30,19 @@ const DateRangeSelector: React.FC = () => {
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center py-2">
-      <Head>
-        <title>Range Selector</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+      <div suppressHydrationWarning={true}>
+        {typeof window && (
+          <Calendar
+            onDayClick={(e: any, date: string) => onDayClick(e, date)}
+            from={from}
+            end={end}
+          />
+        )}
+      </div>
 
-      <main className="flex w-full flex-1 flex-col items-center justify-center space-y-4 px-20 text-center">
-        <h1 className="text-4xl font-bold text-brand">Range Selector</h1>
-
-        <div suppressHydrationWarning={true}>
-          {typeof window && (
-            <Calendar
-              onDayClick={(e: any, date: string) => onDayClick(e, date)}
-              from={from}
-              end={end}
-            />
-          )}
-        </div>
-
-        <div className="flex flex-row justify-between">
-          <button onClick={onClearDates}>Clear</button>
-        </div>
-      </main>
+      <div className="flex flex-row justify-between">
+        <button onClick={onClearDates}>Clear</button>
+      </div>
     </div>
   )
 }

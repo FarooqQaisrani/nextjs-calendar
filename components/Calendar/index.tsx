@@ -11,6 +11,7 @@ type MyProps = {
   onDayClick?: Function
   from?: string | null
   end?: string | null
+  showCalendarWithoutChecks?: boolean
 }
 type MyState = {
   dateContext: any
@@ -22,7 +23,6 @@ type MyState = {
 export default class Calendar extends React.PureComponent<MyProps, MyState> {
   constructor(props: MyProps) {
     super(props)
-    this.width = props.width || '350px'
   }
 
   state: MyState = {
@@ -31,9 +31,6 @@ export default class Calendar extends React.PureComponent<MyProps, MyState> {
     showMonthPopup: false,
     showYearNav: false,
   }
-
-  //styles
-  width = '350px'
 
   //Get weekdays from moment.js
   weekdays = moment.weekdays()
@@ -88,7 +85,7 @@ export default class Calendar extends React.PureComponent<MyProps, MyState> {
     })
   }
 
-  onDayClick = (e, date) => {
+  onDayClick = (e: any, date: string) => {
     this.props.onDayClick && this.props.onDayClick(e, date)
   }
   render() {
@@ -104,13 +101,7 @@ export default class Calendar extends React.PureComponent<MyProps, MyState> {
     //render days from previous and next months
     let daysFromPrevNextMonth = []
     for (let i = 0; i < +this.firstDayOfMonth(); i++) {
-      daysFromPrevNextMonth.push(
-        <Date
-          key={i}
-          className="pointer-events-none h-10 w-10 cursor-not-allowed bg-slate-200 text-gray-500"
-          date={{ date: '' }}
-        />
-      )
+      daysFromPrevNextMonth.push(<Date key={i} date={{ date: '' }} />)
     }
 
     //render this month days
@@ -126,6 +117,9 @@ export default class Calendar extends React.PureComponent<MyProps, MyState> {
           }}
           from={this.props.from}
           end={this.props.end}
+          showCalendarWithoutChecks={
+            this.props.showCalendarWithoutChecks ?? false
+          }
         />
       )
     }

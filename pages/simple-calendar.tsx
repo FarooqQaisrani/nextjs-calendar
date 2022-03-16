@@ -11,13 +11,9 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className="flex w-full flex-1 flex-col items-center justify-center space-y-4 px-20 text-center">
-        <h1 className="text-4xl font-bold text-brand">Range Selector</h1>
-
-        <div suppressHydrationWarning={true}>
-          {typeof window && <DateRangeSelector />}
-        </div>
-      </main>
+      <div suppressHydrationWarning={true}>
+        {typeof window && <Calendar showCalendarWithoutChecks={true} />}
+      </div>
     </div>
   )
 }

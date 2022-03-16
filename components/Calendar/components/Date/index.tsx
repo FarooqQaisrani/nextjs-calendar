@@ -8,6 +8,7 @@ interface Props {
   onClick?: MouseEventHandler<any> | null
   from?: string | null
   end?: string | null
+  showCalendarWithoutChecks?: boolean
 }
 
 const Date: React.FC<Props> = (props: Props) => {
@@ -19,35 +20,37 @@ const Date: React.FC<Props> = (props: Props) => {
     classess.push('border-b border-blue-700')
   }
 
-  // Disable any day previous days from Today
-  const isBefore = moment(props.date.date).isBefore(moment(), 'day')
-  if (isBefore) {
-    classess.push(
-      'cursor-not-allowed hover:bg-slate-200 text-gray-300 hover:text-gray-300'
-    )
-  }
-
-  // Highlight From date
-  if (props.from) {
-    const isSame = moment(props.from).isSame(moment(props.date.date), 'day')
-    if (isSame) {
-      classess.push('bg-blue-500 text-white selected')
+  let isBefore = moment(props.date.date).isBefore(moment(), 'day')
+  if (!props.showCalendarWithoutChecks) {
+    // Disable any day previous days from Today
+    if (isBefore) {
+      classess.push(
+        'cursor-not-allowed hover:bg-slate-200 text-gray-300 hover:text-gray-300'
+      )
     }
-  }
 
-  // Highlight End date
-  if (props.end) {
-    const isSame = moment(props.end).isSame(moment(props.date.date), 'day')
-    if (isSame) {
-      classess.push('bg-blue-500 text-white selected')
+    // Highlight From date
+    if (props.from) {
+      const isSame = moment(props.from).isSame(moment(props.date.date), 'day')
+      if (isSame) {
+        classess.push('bg-blue-500 text-white selected')
+      }
     }
-  }
 
-  // Highlight FDates between From and End
-  if (props.from && props.end) {
-    const isBetween = moment(props.date.date).isBetween(props.from, props.end)
-    if (isBetween) {
-      classess.push('bg-blue-500 text-white selected')
+    // Highlight End date
+    if (props.end) {
+      const isSame = moment(props.end).isSame(moment(props.date.date), 'day')
+      if (isSame) {
+        classess.push('bg-blue-500 text-white selected')
+      }
+    }
+
+    // Highlight FDates between From and End
+    if (props.from && props.end) {
+      const isBetween = moment(props.date.date).isBetween(props.from, props.end)
+      if (isBetween) {
+        classess.push('bg-blue-500 text-white selected')
+      }
     }
   }
 

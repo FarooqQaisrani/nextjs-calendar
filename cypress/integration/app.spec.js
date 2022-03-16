@@ -7,7 +7,7 @@ describe('Given that I am any user', () => {
 
   context('When I access homepage', () => {
     it('It should return homepage', () => {
-      cy.contains('Calendar app')
+      cy.contains('Range Selector')
     })
   })
 })
