@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react'
 
 const Home: NextPage = () => {
   const [unavailableDates, setUnavailableDates] = useState(null)
+  const [los, setLos] = useState(null)
   const [isLoading, setLoading] = useState(false)
 
   /*----------------------------------------
@@ -16,6 +17,13 @@ const Home: NextPage = () => {
       .then((res) => res.json())
       .then((data) => {
         setUnavailableDates(data)
+        setLoading(false)
+      })
+
+    fetch('/api/los-dates')
+      .then((res) => res.json())
+      .then((data) => {
+        setLos(data)
         setLoading(false)
       })
   }, [])
@@ -34,7 +42,7 @@ const Home: NextPage = () => {
 
         <div suppressHydrationWarning={true}>
           {typeof window && (
-            <DateRangeSelector unavailableDates={unavailableDates} />
+            <DateRangeSelector unavailableDates={unavailableDates} los={los} />
           )}
         </div>
       </main>

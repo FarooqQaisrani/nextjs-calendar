@@ -1,10 +1,11 @@
 import Calendar from 'components/Calendar'
 import moment from 'moment'
 import React, { useState } from 'react'
-import { UnvailableDate } from 'types'
+import { LosDate, UnvailableDate } from 'types'
 
 interface Props {
   unavailableDates?: Array<UnvailableDate> | null | undefined
+  los?: Array<LosDate> | null | undefined
 }
 
 const DateRangeSelector: React.FC<Props> = (props: Props) => {
@@ -12,8 +13,6 @@ const DateRangeSelector: React.FC<Props> = (props: Props) => {
   const [end, setEnd] = useState<string | null>(null)
 
   const onDayClick = (e: any, date: string) => {
-    console.log(date)
-
     const isBefore = moment(date).isBefore(from, 'day')
 
     if ((from && end) || isBefore) {
@@ -32,7 +31,7 @@ const DateRangeSelector: React.FC<Props> = (props: Props) => {
   }
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center py-2">
+    <div className="flex  flex-col items-center justify-center border py-8 px-8">
       <div suppressHydrationWarning={true}>
         {typeof window && (
           <Calendar
@@ -40,12 +39,18 @@ const DateRangeSelector: React.FC<Props> = (props: Props) => {
             from={from}
             end={end}
             unavailableDates={props.unavailableDates}
+            los={props.los}
           />
         )}
       </div>
 
-      <div className="flex flex-row justify-between">
-        <button onClick={onClearDates}>Clear</button>
+      <div className="flex w-full flex-row justify-start py-4">
+        <button
+          className="rounded-full px-4 py-2 shadow-sm hover:shadow-md"
+          onClick={onClearDates}
+        >
+          Clear
+        </button>
       </div>
     </div>
   )

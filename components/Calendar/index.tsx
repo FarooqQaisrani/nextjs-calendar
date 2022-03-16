@@ -1,6 +1,6 @@
 import moment from 'moment'
 import React from 'react'
-import { UnvailableDate } from 'types'
+import { LosDate, UnvailableDate } from 'types'
 import Date from './components/Date'
 
 type MyProps = {
@@ -14,6 +14,7 @@ type MyProps = {
   end?: string | null
   showCalendarWithoutChecks?: boolean
   unavailableDates?: Array<UnvailableDate> | null
+  los?: Array<LosDate> | null
 }
 type MyState = {
   dateContext: any
@@ -71,16 +72,6 @@ export default class Calendar extends React.PureComponent<MyProps, MyState> {
     this.props.onPrevMonth && this.props.onPrevMonth()
   }
 
-  MonthNav = () => {
-    return (
-      <span className="cursor-pointer text-black">
-        <span data-testid="month" className="text-black">
-          {this.monthLabel()}
-        </span>
-      </span>
-    )
-  }
-
   showYearEditor = () => {
     this.setState({
       showYearNav: true,
@@ -108,11 +99,20 @@ export default class Calendar extends React.PureComponent<MyProps, MyState> {
     })
   }
 
+  returnLosIfDateExistsInLosArray = (date: string) => {
+    const found = this.props.los?.find((item) => item.day === date)
+    if (found) {
+      return found
+    } else {
+      return null
+    }
+  }
+
   render() {
     //render weekdays
     let weekdays = this.weekdaysShort.map((day) => {
       return (
-        <td key={day} className="h-10 w-10 bg-slate-200">
+        <td key={day} className="font-medium text-textGray opacity-75">
           {day}
         </td>
       )
@@ -129,7 +129,10 @@ export default class Calendar extends React.PureComponent<MyProps, MyState> {
     //render this month days
     let daysInThisMonth = []
     for (let d = 1; d <= this.daysInMonth(); d++) {
-      const makeDateString = `${this.year()}-${this.month()}-${d}`
+      const makeDateString = `${this.year()}-${this.month()}-${
+        d < 9 ? `0${d}` : d
+      }`
+
       daysInThisMonth.push(
         <Date
           key={makeDateString}
@@ -143,6 +146,7 @@ export default class Calendar extends React.PureComponent<MyProps, MyState> {
             this.props.showCalendarWithoutChecks ?? false
           }
           isUnavailable={this.checkIfDateIsUnavailable(makeDateString)}
+          los={this.returnLosIfDateExistsInLosArray(makeDateString)}
         />
       )
     }
@@ -173,65 +177,74 @@ export default class Calendar extends React.PureComponent<MyProps, MyState> {
 
     return (
       <div
-        className="relative mx-auto flex w-96 flex-row justify-center"
+        className="relative mx-auto flex select-none flex-row justify-center"
         data-testid="calendar"
       >
         <table data-testid="calendar">
           {/* Header */}
-          <thead className="bg-gray-500">
+          <thead className="">
             <tr>
               <td colSpan={1}>
-                <svg
+                <button
                   data-testid="btn-prev-month"
-                  onClick={(e) => {
-                    this.prevMonth()
-                  }}
-                  stroke="currentColor"
-                  fill="currentColor"
-                  strokeWidth="0"
-                  viewBox="0 0 16 16"
-                  height="1em"
-                  width="1em"
-                  xmlns="http://www.w3.org/2000/svg"
+                  className="flex h-12 w-full flex-row items-center justify-center"
+                  onClick={this.prevMonth}
                 >
-                  <path
-                    fillRule="evenodd"
-                    d="M11.354 1.646a.5.5 0 010 .708L5.707 8l5.647 5.646a.5.5 0 01-.708.708l-6-6a.5.5 0 010-.708l6-6a.5.5 0 01.708 0z"
-                    clipRule="evenodd"
-                  ></path>
-                </svg>
+                  <svg
+                    stroke="currentColor"
+                    fill="currentColor"
+                    strokeWidth="0"
+                    viewBox="0 0 16 16"
+                    height="1em"
+                    width="1em"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M11.354 1.646a.5.5 0 010 .708L5.707 8l5.647 5.646a.5.5 0 01-.708.708l-6-6a.5.5 0 010-.708l6-6a.5.5 0 01.708 0z"
+                      clipRule="evenodd"
+                    ></path>
+                  </svg>
+                </button>
               </td>
               <td colSpan={5}>
-                <this.MonthNav /> {this.year()}
+                <span
+                  data-testid="month"
+                  className="h-12 font-bold text-textBrand"
+                >
+                  {this.monthLabel()} {this.year()}
+                </span>
               </td>
               <td colSpan={1}>
-                <svg
+                <button
                   data-testid="btn-next-month"
-                  onClick={(e) => {
-                    this.nextMonth()
-                  }}
-                  stroke="currentColor"
-                  fill="currentColor"
-                  strokeWidth="0"
-                  viewBox="0 0 16 16"
-                  height="1em"
-                  width="1em"
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="rotate-180"
+                  className="flex h-12 w-full flex-row items-center justify-center"
+                  onClick={this.nextMonth}
                 >
-                  <path
-                    fillRule="evenodd"
-                    d="M11.354 1.646a.5.5 0 010 .708L5.707 8l5.647 5.646a.5.5 0 01-.708.708l-6-6a.5.5 0 010-.708l6-6a.5.5 0 01.708 0z"
-                    clipRule="evenodd"
-                  ></path>
-                </svg>
+                  <svg
+                    stroke="currentColor"
+                    fill="currentColor"
+                    strokeWidth="0"
+                    viewBox="0 0 16 16"
+                    height="1em"
+                    width="1em"
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="rotate-180"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M11.354 1.646a.5.5 0 010 .708L5.707 8l5.647 5.646a.5.5 0 01-.708.708l-6-6a.5.5 0 010-.708l6-6a.5.5 0 01.708 0z"
+                      clipRule="evenodd"
+                    ></path>
+                  </svg>
+                </button>
               </td>
             </tr>
           </thead>
 
           <tbody>
             {/*Week Days */}
-            <tr className=" bg-slate-100">{weekdays}</tr>
+            <tr className="">{weekdays}</tr>
 
             {/* Dates */}
             {daysElements}
