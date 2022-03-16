@@ -11,10 +11,10 @@ const Home: NextPage = () => {
       </Head>
 
       <main className="flex w-full flex-1 flex-col items-center space-y-4  text-center">
-        <div className="flex flex-col max-w-lg">
+        <div className="flex max-w-lg flex-col">
           <h1 className="text-2xl font-bold text-brand">Range Selector</h1>
           <p className="text-">
-            In this view Calendar Compnent is disabling the dates before Today.
+            In this view Calendar Component is disabling the dates before Today.
           </p>
         </div>
 
