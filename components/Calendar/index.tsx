@@ -1,26 +1,33 @@
 import React from 'react'
 import moment from 'moment'
-import Date from 'components/shared/Date'
+import Date from './components/Date'
 
 type MyProps = {
   width?: string
+  onMonthChange?: Function
+  onYearChange?: Function
+  onNextMonth?: Function
+  onPrevMonth?: Function
 }
 type MyState = {
   dateContext: any
   today: any
   showMonthPopup: boolean
+  showYearNav: boolean
 }
 
 export default class Calendar extends React.PureComponent<MyProps, MyState> {
   constructor(props: MyProps) {
     super(props)
     this.width = props.width || '350px'
+    this.yearInput = React.createRef()
   }
 
   state: MyState = {
     dateContext: moment(),
     today: moment(),
     showMonthPopup: false,
+    showYearNav: false,
   }
 
   //styles
@@ -45,7 +52,36 @@ export default class Calendar extends React.PureComponent<MyProps, MyState> {
     return firstDay
   }
 
-  onSelectChange = (e, data) => {}
+  setMonth = (month) => {
+    let monthNo = this.months.indexOf(month)
+    let dateContext = Object.assign({}, this.state.dateContext)
+    dateContext = moment(dateContext).set('month', monthNo)
+    this.setState({
+      dateContext: dateContext,
+    })
+  }
+  nextMonth = () => {
+    let dateContext = Object.assign({}, this.state.dateContext)
+    dateContext = moment(dateContext).add(1, 'month')
+    this.setState({
+      dateContext: dateContext,
+    })
+    this.props.onNextMonth && this.props.onNextMonth()
+  }
+
+  prevMonth = () => {
+    let dateContext = Object.assign({}, this.state.dateContext)
+    dateContext = moment(dateContext).subtract(1, 'month')
+    this.setState({
+      dateContext: dateContext,
+    })
+    this.props.onPrevMonth && this.props.onPrevMonth()
+  }
+
+  onSelectChange = (e, data) => {
+    this.setMonth(data)
+    this.props.onMonthChange && this.props.onMonthChange()
+  }
 
   SelectList = (props: any) => {
     let popup = props.data.map((data: any) => {
@@ -82,6 +118,56 @@ export default class Calendar extends React.PureComponent<MyProps, MyState> {
           {this.month()}
         </span>
         {this.state.showMonthPopup && <this.SelectList data={this.months} />}
+      </span>
+    )
+  }
+
+  showYearEditor = () => {
+    this.setState({
+      showYearNav: true,
+    })
+  }
+
+  onYearChange = (e) => {
+    this.setYear(e.target.value)
+    this.props.onYearChange && this.props.onYearChange(e, e.target.value)
+  }
+  setYear = (year) => {
+    let dateContext = Object.assign({}, this.state.dateContext)
+    dateContext = moment(dateContext).set('year', year)
+    this.setState({
+      dateContext: dateContext,
+    })
+  }
+
+  onKeyUpYear = (e) => {
+    if (e.which === 13 || e.which === 27) {
+      this.setYear(e.target.value)
+      this.setState({
+        showYearNav: false,
+      })
+    }
+  }
+  YearNav = () => {
+    return this.state.showYearNav ? (
+      <input
+        defaultValue={this.year()}
+        ref={(yearInput) => {
+          this.yearInput = yearInput
+        }}
+        onKeyUp={(e) => this.onKeyUpYear(e)}
+        onChange={(e) => this.onYearChange(e)}
+        type="number"
+        placeholder="year"
+      />
+    ) : (
+      <span
+        className="cursor-pointer"
+        onDoubleClick={(e) => {
+          this.showYearEditor(e)
+        }}
+      >
+        {this.year()}
       </span>
     )
   }
@@ -157,11 +243,52 @@ export default class Calendar extends React.PureComponent<MyProps, MyState> {
           {/* Header */}
           <thead className="bg-gray-500">
             <tr>
-              <td colSpan={1}></td>
-              <td colSpan={5}>
-                <this.MonthNav />
+              <td colSpan={1}>
+                <svg
+                  data-testid="btn-prev-month"
+                  onClick={(e) => {
+                    this.prevMonth()
+                  }}
+                  stroke="currentColor"
+                  fill="currentColor"
+                  strokeWidth="0"
+                  viewBox="0 0 16 16"
+                  height="1em"
+                  width="1em"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M11.354 1.646a.5.5 0 010 .708L5.707 8l5.647 5.646a.5.5 0 01-.708.708l-6-6a.5.5 0 010-.708l6-6a.5.5 0 01.708 0z"
+                    clipRule="evenodd"
+                  ></path>
+                </svg>
               </td>
-              <td colSpan={1}></td>
+              <td colSpan={5}>
+                <this.MonthNav /> <this.YearNav />
+              </td>
+              <td colSpan={1}>
+                <svg
+                  data-testid="btn-next-month"
+                  onClick={(e) => {
+                    this.nextMonth()
+                  }}
+                  stroke="currentColor"
+                  fill="currentColor"
+                  strokeWidth="0"
+                  viewBox="0 0 16 16"
+                  height="1em"
+                  width="1em"
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="rotate-180"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M11.354 1.646a.5.5 0 010 .708L5.707 8l5.647 5.646a.5.5 0 01-.708.708l-6-6a.5.5 0 010-.708l6-6a.5.5 0 01.708 0z"
+                    clipRule="evenodd"
+                  ></path>
+                </svg>
+              </td>
             </tr>
           </thead>
 
