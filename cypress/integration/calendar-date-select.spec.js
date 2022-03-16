@@ -7,8 +7,8 @@ describe('Given that I am any user', () => {
 
   context('When I access Date Range Selector', () => {
     it('I can select FROM date', () => {
-      cy.contains('24').click()
-      cy.contains('24').should('have.class', 'selected')
+      cy.get('[data-testid="date-2022-03-16"]').click()
+      cy.get('[data-testid="date-2022-03-16"]').should('have.class', 'selected')
     })
 
     it('I can select END date', () => {
@@ -16,7 +16,10 @@ describe('Given that I am any user', () => {
       cy.contains('30').click()
 
       for (let i = 24; i < 31; i++) {
-        cy.contains(i).should('have.class', 'selected')
+        cy.get(`[data-testid="date-2022-03-${i}"]`).should(
+          'have.class',
+          'selected'
+        )
       }
     })
   })
