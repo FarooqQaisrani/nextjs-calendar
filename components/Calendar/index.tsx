@@ -10,6 +10,7 @@ type MyProps = {
   onPrevMonth?: Function
   onDayClick?: Function
   from?: string | null
+  end?: string | null
 }
 type MyState = {
   dateContext: any
@@ -124,6 +125,7 @@ export default class Calendar extends React.PureComponent<MyProps, MyState> {
             this.onDayClick(e, makeDateString)
           }}
           from={this.props.from}
+          end={this.props.end}
         />
       )
     }

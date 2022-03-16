@@ -2,13 +2,30 @@ import React, { useState } from 'react'
 import Head from 'next/head'
 import Calendar from 'components/Calendar'
 import { ProjectDate } from 'types'
+import moment from 'moment'
 
 const DateRangeSelector: React.FC = () => {
   const [from, setFrom] = useState<string | null>(null)
+  const [end, setEnd] = useState<string | null>(null)
 
   const onDayClick = (e: any, date: string) => {
     console.log(date)
-    setFrom(date)
+
+    const isBefore = moment(date).isBefore(from, 'day')
+
+    if ((from && end) || isBefore) {
+      setFrom(date)
+      setEnd(null)
+    } else if (from) {
+      setEnd(date)
+    } else {
+      setFrom(date)
+    }
+  }
+
+  const onClearDates = () => {
+    setFrom(null)
+    setEnd(null)
   }
 
   return (
@@ -26,12 +43,13 @@ const DateRangeSelector: React.FC = () => {
             <Calendar
               onDayClick={(e: any, date: string) => onDayClick(e, date)}
               from={from}
+              end={end}
             />
           )}
         </div>
 
         <div className="flex flex-row justify-between">
-          <button onClick={() => setFrom(null)}>Clear</button>
+          <button onClick={onClearDates}>Clear</button>
         </div>
       </main>
     </div>
