@@ -12,14 +12,6 @@ export default function handler(
 ) {
   res.status(200).json([
     {
-      startDate: '2022-03-1',
-      endDate: '2022-03-15',
-    },
-    {
-      startDate: '2022-03-30',
-      endDate: '2022-04-12',
-    },
-    {
       startDate: '2022-04-13',
       endDate: '2022-04-25',
     },
@@ -30,10 +22,6 @@ export default function handler(
     {
       startDate: '2022-07-02',
       endDate: '2022-07-16',
-    },
-    {
-      startDate: '2021-09-27',
-      endDate: '2022-03-29',
     },
     {
       startDate: '2022-10-12',

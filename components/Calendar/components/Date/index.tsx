@@ -48,7 +48,12 @@ const Date: React.FC<Props> = (props: Props) => {
 
     // Highlight Dates between From and End
     if (props.from && props.end) {
-      const isBetween = moment(props.date.date).isBetween(props.from, props.end)
+      const isBetween = moment(props.date.date).isBetween(
+        props.from,
+        props.end,
+        undefined,
+        '[]'
+      )
       if (isBetween) {
         classess.push('bg-blue-500 text-white selected')
       }
