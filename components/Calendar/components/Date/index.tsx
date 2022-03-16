@@ -105,7 +105,7 @@ const Date: React.FC<Props> = (props: Props) => {
     >
       <div
         className={[
-          'relative z-0 flex h-14 w-14 flex-row items-center justify-center rounded-full border border-white hover:border-brand',
+          'relative z-0 flex h-14 w-14 flex-row items-center justify-center rounded-full border border-transparent hover:border-brand',
           ...internalClasses,
         ].join(' ')}
       >
