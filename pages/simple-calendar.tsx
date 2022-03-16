@@ -1,7 +1,6 @@
+import Calendar from 'components/Calendar'
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import Calendar from 'components/Calendar'
-import DateRangeSelector from 'components/DateRangeSelector'
 
 const Home: NextPage = () => {
   return (
@@ -11,7 +10,7 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className="flex w-full flex-1 flex-col items-center justify-center space-y-4 px-20 text-center">
+      <main className="flex w-full flex-1 flex-col items-center  space-y-4  text-center">
         <h1 className="text-4xl font-bold text-brand">Simple Calendar </h1>
         <div suppressHydrationWarning={true}>
           {typeof window && <Calendar showCalendarWithoutChecks={true} />}

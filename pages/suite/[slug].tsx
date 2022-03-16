@@ -1,6 +1,7 @@
+import DateRangeSelector from 'components/DateRangeSelector'
+import SharedUiSkeletonsCalendar from 'components/shared/skeletons/calendar'
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import DateRangeSelector from 'components/DateRangeSelector'
 import { useEffect, useState } from 'react'
 
 const Home: NextPage = () => {
@@ -28,8 +29,6 @@ const Home: NextPage = () => {
       })
   }, [])
 
-  if (isLoading) return <p>Loading...</p>
-
   return (
     <div className="flex min-h-screen flex-col items-center justify-center py-2">
       <Head>
@@ -37,14 +36,21 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className="flex w-full flex-1 flex-col items-center justify-center space-y-4 px-20 text-center">
+      <main className="flex w-full flex-1 flex-col items-center space-y-4 text-center">
         <h1 className="text-4xl font-bold text-brand">Suite Date Selector</h1>
 
-        <div suppressHydrationWarning={true}>
-          {typeof window && (
-            <DateRangeSelector unavailableDates={unavailableDates} los={los} />
-          )}
-        </div>
+        {isLoading ? (
+          <SharedUiSkeletonsCalendar />
+        ) : (
+          <div suppressHydrationWarning={true}>
+            {typeof window && (
+              <DateRangeSelector
+                unavailableDates={unavailableDates}
+                los={los}
+              />
+            )}
+          </div>
+        )}
       </main>
     </div>
   )

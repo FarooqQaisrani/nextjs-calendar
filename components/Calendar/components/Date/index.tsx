@@ -93,7 +93,7 @@ const Date: React.FC<Props> = (props: Props) => {
   return (
     <td
       className={[
-        `group z-0 h-14 w-14 cursor-pointer ${props.className}`,
+        `group z-0 h-10 w-10 cursor-pointer md:h-14 md:w-14 ${props.className}`,
         ...classess,
       ].join(' ')}
       data-testid={`date-${props.date.date}`}
@@ -105,7 +105,7 @@ const Date: React.FC<Props> = (props: Props) => {
     >
       <div
         className={[
-          'relative z-0 flex h-14 w-14 flex-row items-center justify-center rounded-full border border-transparent hover:border-brand',
+          'relative z-0 flex h-10 w-10 flex-row items-center justify-center rounded-full border border-transparent hover:border-brand md:h-14 md:w-14',
           ...internalClasses,
         ].join(' ')}
       >

@@ -17,11 +17,11 @@ const Navbar: React.FC = () => {
     },
   ]
   return (
-    <ul className="flex flex-row justify-center space-x-4  p-4">
+    <ul className="flex flex-row flex-wrap items-center justify-center p-4 shadow-sm sm:flex-row sm:space-x-4">
       {routes.map((route) => (
-        <li key={route.path}>
+        <li key={route.path} className="inline-flex">
           <Link href={route.path}>
-            <a className="px-4 py-2 font-bold uppercase text-brand shadow-md">
+            <a className="my-2 whitespace-nowrap px-4 py-2 text-xs font-bold uppercase text-brand shadow-md">
               {route.name}
             </a>
           </Link>
