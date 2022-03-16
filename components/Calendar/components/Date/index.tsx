@@ -100,7 +100,7 @@ const Date: React.FC<Props> = (props: Props) => {
     // Calcualte Checkout only state
     let getCheckoutOnly = moment(props.date.date)
     if (props.los && props.firstUnavilableDate && !props.from) {
-      getCheckoutOnly = getCheckoutOnly.add(props.los.los + 1, 'days')
+      getCheckoutOnly = getCheckoutOnly.add(props.los.los, 'days')
       if (getCheckoutOnly.isSameOrAfter(props.firstUnavilableDate.startDate)) {
         checkoutOnly = true
 
