@@ -140,7 +140,7 @@ export default class Calendar extends React.PureComponent<MyProps, MyState> {
       daysFromPrevNextMonth.push(
         <Date
           key={i}
-          className="h-10 w-10 bg-slate-200 text-gray-500"
+          className="pointer-events-none h-10 w-10 cursor-not-allowed bg-slate-200 text-gray-500"
           date={{ date: '' }}
         />
       )
