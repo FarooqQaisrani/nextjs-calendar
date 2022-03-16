@@ -8,6 +8,8 @@ type MyProps = {
   onYearChange?: Function
   onNextMonth?: Function
   onPrevMonth?: Function
+  onDayClick?: Function
+  from?: string
 }
 type MyState = {
   dateContext: any
@@ -42,24 +44,16 @@ export default class Calendar extends React.PureComponent<MyProps, MyState> {
     Helper Functions 
   ----------------------------------------*/
   year = () => this.state.dateContext.format('Y')
-  month = () => this.state.dateContext.format('MMMM')
+  month = () => this.state.dateContext.format('MM')
+  monthLabel = () => this.state.dateContext.format('MMMM')
   daysInMonth = () => this.state.dateContext.daysInMonth()
   currentDate = () => this.state.dateContext.get('date')
-  currentDay = () => this.state.dateContext.format('D')
   firstDayOfMonth = () => {
     let dateContext = this.state.dateContext
     let firstDay = moment(dateContext).startOf('month').format('d')
     return firstDay
   }
 
-  setMonth = (month) => {
-    let monthNo = this.months.indexOf(month)
-    let dateContext = Object.assign({}, this.state.dateContext)
-    dateContext = moment(dateContext).set('month', monthNo)
-    this.setState({
-      dateContext: dateContext,
-    })
-  }
   nextMonth = () => {
     let dateContext = Object.assign({}, this.state.dateContext)
     dateContext = moment(dateContext).add(1, 'month')
@@ -78,46 +72,12 @@ export default class Calendar extends React.PureComponent<MyProps, MyState> {
     this.props.onPrevMonth && this.props.onPrevMonth()
   }
 
-  onSelectChange = (e, data) => {
-    this.setMonth(data)
-    this.props.onMonthChange && this.props.onMonthChange()
-  }
-
-  SelectList = (props: any) => {
-    let popup = props.data.map((data: any) => {
-      return (
-        <div key={data}>
-          <button
-            onClick={(e) => {
-              this.onSelectChange(e, data)
-            }}
-          >
-            {data}
-          </button>
-        </div>
-      )
-    })
-
-    return <div className="">{popup}</div>
-  }
-
-  onChangeMonth = (e, month) => {
-    this.setState({
-      showMonthPopup: !this.state.showMonthPopup,
-    })
-  }
-
   MonthNav = () => {
     return (
       <span className="cursor-pointer text-black">
-        <span
-          data-testid="month"
-          className="text-black"
-          onClick={(e) => this.onChangeMonth(e, this.month())}
-        >
-          {this.month()}
+        <span data-testid="month" className="text-black">
+          {this.monthLabel()}
         </span>
-        {this.state.showMonthPopup && <this.SelectList data={this.months} />}
       </span>
     )
   }
@@ -149,18 +109,7 @@ export default class Calendar extends React.PureComponent<MyProps, MyState> {
     }
   }
   YearNav = () => {
-    return this.state.showYearNav ? (
-      <input
-        defaultValue={this.year()}
-        ref={(yearInput) => {
-          this.yearInput = yearInput
-        }}
-        onKeyUp={(e) => this.onKeyUpYear(e)}
-        onChange={(e) => this.onYearChange(e)}
-        type="number"
-        placeholder="year"
-      />
-    ) : (
+    return (
       <span
         className="cursor-pointer"
         onDoubleClick={(e) => {
@@ -172,6 +121,9 @@ export default class Calendar extends React.PureComponent<MyProps, MyState> {
     )
   }
 
+  onDayClick = (e, date) => {
+    this.props.onDayClick && this.props.onDayClick(e, date)
+  }
   render() {
     //render weekdays
     let weekdays = this.weekdaysShort.map((day) => {
@@ -189,7 +141,7 @@ export default class Calendar extends React.PureComponent<MyProps, MyState> {
         <Date
           key={i}
           className="h-10 w-10 bg-slate-200 text-gray-500"
-          date={''}
+          date={{ date: '' }}
         />
       )
     }
@@ -197,15 +149,14 @@ export default class Calendar extends React.PureComponent<MyProps, MyState> {
     //render this month days
     let daysInThisMonth = []
     for (let d = 1; d <= this.daysInMonth(); d++) {
+      const makeDateString = `${this.year()}-${this.month()}-${d}`
       daysInThisMonth.push(
         <Date
-          key={d * 100}
-          className={`h-10 w-10 ${
-            d === +this.currentDay()
-              ? 'bg-blue-400 text-white'
-              : 'bg-slate-200 text-gray-500'
-          }`}
-          date={d}
+          key={makeDateString}
+          date={{ date: makeDateString, label: d }}
+          onClick={(e) => {
+            this.onDayClick(e, makeDateString)
+          }}
         />
       )
     }
