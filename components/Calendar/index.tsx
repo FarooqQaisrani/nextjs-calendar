@@ -35,6 +35,13 @@ export default class Calendar extends React.PureComponent<MyProps, MyState> {
     showYearNav: false,
   }
 
+  componentDidMount() {
+    this.setState({
+      dateContext: moment(),
+      today: moment(),
+    })
+  }
+
   //Get weekdays from moment.js
   weekdays = moment.weekdays()
   weekdaysShort = moment.weekdaysShort()
