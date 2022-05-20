@@ -15,7 +15,7 @@ interface Props {
   firstUnavilableDate?: UnvailableDate | null
 }
 
-const Date: React.FC<Props> = (props: Props) => {
+const DateComp: React.FC<Props> = (props: Props) => {
   const classess = []
   const internalClasses: Array<string> = []
   let showLosTooltip = false
@@ -190,4 +190,4 @@ const Date: React.FC<Props> = (props: Props) => {
   )
 }
 
-export default Date
+export default DateComp

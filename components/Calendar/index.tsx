@@ -1,7 +1,7 @@
 import moment from 'moment'
 import React from 'react'
 import { LosDate, UnvailableDate } from 'types'
-import Date from './components/Date'
+import DateComp from './components/Date'
 
 type MyProps = {
   width?: string
@@ -15,6 +15,7 @@ type MyProps = {
   showCalendarWithoutChecks?: boolean
   unavailableDates?: Array<UnvailableDate> | null
   los?: Array<LosDate> | null
+  initDate: Date
 }
 type MyState = {
   dateContext: any
@@ -23,24 +24,24 @@ type MyState = {
   showYearNav: boolean
 }
 
-export default class Calendar extends React.PureComponent<MyProps, MyState> {
+export default class Calendar extends React.Component<MyProps, MyState> {
   constructor(props: MyProps) {
     super(props)
   }
 
   state: MyState = {
-    dateContext: moment(),
-    today: moment(),
+    dateContext: moment(Date.now()),
+    today: moment(Date.now()),
     showMonthPopup: false,
     showYearNav: false,
   }
-
   componentDidMount() {
     this.setState({
-      dateContext: moment(),
-      today: moment(),
+      dateContext: moment(Date.now()),
+      today: moment(Date.now()),
     })
   }
+
 
   //Get weekdays from moment.js
   weekdays = moment.weekdays()
@@ -94,7 +95,7 @@ export default class Calendar extends React.PureComponent<MyProps, MyState> {
       null
     }
 
-    this.props.unavailableDates?.forEach((ud: UnvailableDate) => {})
+    this.props.unavailableDates?.forEach((ud: UnvailableDate) => { })
     return this.props.unavailableDates?.some((ud: UnvailableDate) => {
       const isBetween = moment(date).isBetween(
         ud.startDate,
@@ -136,16 +137,15 @@ export default class Calendar extends React.PureComponent<MyProps, MyState> {
     let daysFromPrevNextMonth = []
     for (let i = 0; i < +this.firstDayOfMonth(); i++) {
       daysFromPrevNextMonth.push(
-        <Date key={i} date={{ date: '' }} className="pointer-events-none" />
+        <DateComp key={i} date={{ date: '' }} className="pointer-events-none" />
       )
     }
 
     //render this month days
     let daysInThisMonth = []
     for (let d = 1; d <= this.daysInMonth(); d++) {
-      const makeDateString = `${this.year()}-${this.month()}-${
-        d < 9 ? `0${d}` : d
-      }`
+      const makeDateString = `${this.year()}-${this.month()}-${d < 9 ? `0${d}` : d
+        }`
 
       // Let's find first unavailable date
       let findFirstUnavailableDate = null
@@ -156,7 +156,7 @@ export default class Calendar extends React.PureComponent<MyProps, MyState> {
       }
 
       daysInThisMonth.push(
-        <Date
+        <DateComp
           key={makeDateString}
           date={{ date: makeDateString, label: d }}
           onClick={(e) => {
