@@ -15,7 +15,6 @@ type MyProps = {
   showCalendarWithoutChecks?: boolean
   unavailableDates?: Array<UnvailableDate> | null
   los?: Array<LosDate> | null
-  initDate: Date
 }
 type MyState = {
   dateContext: any
