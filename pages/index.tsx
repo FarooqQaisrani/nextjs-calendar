@@ -1,6 +1,13 @@
-import DateRangeSelector from 'components/DateRangeSelector'
 import type { NextPage } from 'next'
+import dynamic from 'next/dynamic'
 import Head from 'next/head'
+
+const DateRangeSelector = dynamic(
+  () => import('components/DateRangeSelector'),
+  {
+    ssr: false,
+  }
+)
 
 const Home: NextPage = () => {
   return (

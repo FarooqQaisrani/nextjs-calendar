@@ -1,8 +1,15 @@
-import DateRangeSelector from 'components/DateRangeSelector'
 import SharedUiSkeletonsCalendar from 'components/shared/skeletons/calendar'
 import type { NextPage } from 'next'
+import dynamic from 'next/dynamic'
 import Head from 'next/head'
 import { useEffect, useState } from 'react'
+
+const DateRangeSelector = dynamic(
+  () => import('components/DateRangeSelector'),
+  {
+    ssr: false,
+  }
+)
 
 const Home: NextPage = () => {
   const [unavailableDates, setUnavailableDates] = useState(null)

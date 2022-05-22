@@ -15,7 +15,6 @@ type MyProps = {
   showCalendarWithoutChecks?: boolean
   unavailableDates?: Array<UnvailableDate> | null
   los?: Array<LosDate> | null
-  initDate?: any
 }
 type MyState = {
   dateContext: any
@@ -30,8 +29,8 @@ class Calendar extends React.Component<MyProps, MyState> {
   }
 
   state: MyState = {
-    dateContext: this.props.initDate,
-    today: this.props.initDate,
+    dateContext: moment(),
+    today: moment(),
     showMonthPopup: false,
     showYearNav: false,
   }
@@ -270,14 +269,6 @@ class Calendar extends React.Component<MyProps, MyState> {
         </table>
       </div>
     )
-  }
-}
-
-export async function getServerSideProps() {
-  return {
-    props: {
-      initDate: moment(),
-    }, // will be passed to the page component as props
   }
 }
 
