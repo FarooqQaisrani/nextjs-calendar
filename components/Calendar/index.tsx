@@ -15,6 +15,7 @@ type MyProps = {
   showCalendarWithoutChecks?: boolean
   unavailableDates?: Array<UnvailableDate> | null
   los?: Array<LosDate> | null
+  initDate?: any
 }
 type MyState = {
   dateContext: any
@@ -23,24 +24,17 @@ type MyState = {
   showYearNav: boolean
 }
 
-export default class Calendar extends React.Component<MyProps, MyState> {
+class Calendar extends React.Component<MyProps, MyState> {
   constructor(props: MyProps) {
     super(props)
   }
 
   state: MyState = {
-    dateContext: moment(Date.now()),
-    today: moment(Date.now()),
+    dateContext: this.props.initDate,
+    today: this.props.initDate,
     showMonthPopup: false,
     showYearNav: false,
   }
-  componentDidMount() {
-    this.setState({
-      dateContext: moment(Date.now()),
-      today: moment(Date.now()),
-    })
-  }
-
 
   //Get weekdays from moment.js
   weekdays = moment.weekdays()
@@ -94,7 +88,7 @@ export default class Calendar extends React.Component<MyProps, MyState> {
       null
     }
 
-    this.props.unavailableDates?.forEach((ud: UnvailableDate) => { })
+    this.props.unavailableDates?.forEach((ud: UnvailableDate) => {})
     return this.props.unavailableDates?.some((ud: UnvailableDate) => {
       const isBetween = moment(date).isBetween(
         ud.startDate,
@@ -143,8 +137,9 @@ export default class Calendar extends React.Component<MyProps, MyState> {
     //render this month days
     let daysInThisMonth = []
     for (let d = 1; d <= this.daysInMonth(); d++) {
-      const makeDateString = `${this.year()}-${this.month()}-${d < 9 ? `0${d}` : d
-        }`
+      const makeDateString = `${this.year()}-${this.month()}-${
+        d < 9 ? `0${d}` : d
+      }`
 
       // Let's find first unavailable date
       let findFirstUnavailableDate = null
@@ -277,3 +272,13 @@ export default class Calendar extends React.Component<MyProps, MyState> {
     )
   }
 }
+
+export async function getServerSideProps() {
+  return {
+    props: {
+      initDate: moment(),
+    }, // will be passed to the page component as props
+  }
+}
+
+export default Calendar
